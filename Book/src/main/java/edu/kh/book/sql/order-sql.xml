@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>order-sql</comment>
+	
+	<entry key="purchase">
+		INSERT INTO ORDERS VALUES(
+		SEQ_ORDER_NO.NEXTVAL, ?, ?, SYSDATE, ?, 'N'
+		)
+	</entry>
+	
+	<entry key="selctpriceAll">
+		SELECT MEMBER_NO, MEMBER_NAME, BOOK_NO, BOOK_TITLE, 
+		MEMBER_ADDRESS, ORDER_DATE, ORDER_QUANTITY, STATUS, PRICE
+		FROM "ORDERS"
+		JOIN "BOOK" USING(BOOK_NO)
+		JOIN "MEMBER" USING(MEMBER_NO)
+		WHERE MEMBER_NO = ?
+		AND STATUS = 'N'
+	</entry>
+	
+	<entry key="delete">
+		UPDATE BOOK 
+		SET STATUS = 'Y' 
+		WHERE MEMBER_NO = ?
+		AND (CURRENT_TIMESTAMP - ORDER_DATE) > INTERVAL '1 minute'
+	</entry>
+</properties>
